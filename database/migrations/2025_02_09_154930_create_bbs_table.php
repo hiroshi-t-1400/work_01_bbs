@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id()->autoIncrement()->unsigned();
             $table->string('name');
             $table->string('body');
-            $table->timestamps('');
+            $table->timestamps();
+
+            $table->softDeletes();
             // $table->timestamps('updated_at');
         });
     }
