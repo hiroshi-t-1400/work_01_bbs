@@ -17,7 +17,9 @@
 
     @include('bbs.posts-erea')
 
-    @if ( Session::has('post') )
+    @if ( Session::has('post_destroy') )
+        @php Session::forget('post_destroy'); @endphp
+
         @include('bbs.post-destroy')
     @endif
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Bbs;
 
 class BbsController extends Controller
 {
@@ -17,7 +18,10 @@ class BbsController extends Controller
     public function top()
     {
         // return redirect()->route('bbs.top');
-        return view('bbs.top');
+        $posts = Bbs::all();
+        return view('bbs.top', [
+            'posts' => $posts,
+        ]);
     }
 
     /**
@@ -29,27 +33,31 @@ class BbsController extends Controller
      */
     public function posts(Request $request)
     {
-        // Validator
+        // Validator　ファサードを使うパターン
         $validator = Validator::make($request->all(), [
             'name' => 'string|max:20',
             'body' => 'required|max:128',
         ]);
 
+        // バリデーションでエラーがあったら処理を止める、&errorsを渡す
         if ( $validator->fails() ) {
-            return redirect('top')
+            return redirect()
+            ->route('top', ['#posts-erea'])
             ->withErrors($validator);
         }
 
-        // todo：動作確認と戻り値の設定、
-        $post = new Bbs();
-        $post = [
-            'name' => $validated->'name',
-            'body' => $validated->'body',
-        ];
+        // バリデーション済みのデータの取得(全て取得する場合)
+        // $validated = $validator->validated();
 
+        // Bbsオブジェクトを宣言
+        $post = new Bbs();
+        // validatorオブジェクトからsafe()メソッドを通して値を取得する
+        $post->name = $validator->safe()->name;
+        $post->body = $validator->safe()->body;
+        // DBにレコードの登録
         $post->save();
 
-        return ;
+        return redirect()->route('top')->with('success', '書き込み完了');
     }
 
     /**
@@ -66,23 +74,21 @@ class BbsController extends Controller
         return redirect()->route('top');
     }
 
-
-
     /**
      * 投稿削除ボタンを押した後確認画面を表示させる
      *
      * @param [type] $post_id
      * @return void
      */
-    public function DeleteModal($post_id)
+    public function DeleteModal(Request $request, $post_id)
     {
-        $post = [
-            'post_id' => $post_id,
-            'post_body' => 'これは消す予定の投稿の内容だよ',
-            'message' => 'デリーとしますか？',
-        ];
+        $postDestroy = Bbs::find($post_id);
+        $posts = Bbs::all();
 
-        return redirect()->route('top')->with(compact('post'));
+        session()->flash('post_destroy', 'ok');
+        // $request->session()->reflash();
+
+        return view('bbs.top')->with('posts', $posts)->with('postDestroy', $postDestroy);
     }
 
     /**

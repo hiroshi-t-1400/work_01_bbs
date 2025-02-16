@@ -50,3 +50,8 @@ Route::get('/pretest', function() {
     return view('/bbs.pretest');
 });
 
+// Route::get('/jump', function () {
+//     // return view('/bbs.top', ['#posts-erea']);
+//     return view('/bbs.top');
+// })->name('jump');
+

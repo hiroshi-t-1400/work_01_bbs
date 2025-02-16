@@ -19,42 +19,31 @@
         </p>
     @endif
 
-    {{-- べた書きポスト１ --}}
-    <div class="post-wrapper">
-        {{-- ID,名前,投稿日時 --}}
-        <div class="posts-info">
-            No.0001 名前 太郎 2025/01/20 (水) 13:45:57
-        </div>
-        <div class="posts-body">
-            はじめてのかきこみです！
-            改行もちゃんとできてるかな？
-            バリデーションのチェックもしましょう！
-            TODO：データベースから書き込み内容とinfo部分も
-        </div>
+    {{-- <a href={{ route('jump', ['#posts-erea']) }}>投稿エリアへジャンプ</a> --}}
+    {{-- <a href={{ route('jump') }}#posts-erea>投稿エリアへジャンプ</a> --}}
 
-        {{-- 投稿ごとの編集、削除ボタン、post_idに投稿番号を渡す --}}
-        <form action="?" method="get" class="post-btn-form">
-            <button type="submit" class="post-edit-btn" formaction="{{ route('edit.edit', ['post_id' => 1]) }}">編集</button>
-            <button type="submit" class="post-edit-btn" formaction="{{ route('edit.delete', ['post_id' => 1]) }}">削除</button>
-        </form>
-    </div>
+    {{-- 書き込み表示エリア --}}
 
-    {{-- べた書きポスト２ --}}
-    <div class="post-wrapper">
-        {{-- ID,名前,投稿日時 --}}
-        <div class="posts-info">
-            No.0002 ネーム 次郎 2025/01/22 (水) 10:00:57
-        </div>
-        <div class="posts-body">
-            TODO：データベースから書き込み内容とinfo部分も受け取って表示しようね
-        </div>
+    {{-- $postsは書き込み一覧モデルクラス、
+    ページ下部に　a href={{ view }}としていたためエラーが起きていた --}}
+    @foreach ($posts as $post)
+        <div class="post-wrapper">
+            {{-- ID,名前,投稿日時 --}}
+            <div class="posts-info">
+                {{-- isoFormat --}}
+                No.{{ sprintf('%04d', $post->id) }} {{ $post->name }} {{ $post->updated_at->isoFormat('YYYY/MM/DD (ddd) HH:mm:ss') }}
+            </div>
+            {{-- 本文 --}}
+            <div class="posts-body" style="white-space:pre-wrap;">{{ $post->body }}</div>
 
-        {{-- 投稿ごとの編集、削除ボタン、post_idに投稿番号を渡す --}}
-        <form action="?" method="get" class="post-btn-form">
-            <button type="submit" class="post-edit-btn" formaction="{{ route('edit.edit', ['post_id' => 2]) }}">編集</button>
-            <button type="submit" class="post-edit-btn" formaction="{{ route('edit.delete', ['post_id' => 2]) }}">削除</button>
-        </form>
-    </div>
+            {{-- 投稿ごとの編集、削除ボタン、post_idに投稿番号を渡す --}}
+            <form action="?" method="get" class="post-btn-form">
+                <button type="submit" class="post-edit-btn" formaction="{{ route('edit.edit', ['post_id' => $post->id]) }}">編集</button>
+                <button type="submit" class="post-edit-btn" formaction="{{ route('edit.delete', ['post_id' => $post->id]) }}">削除</button>
+            </form>
+        </div>
+    {{-- @php endforeach @endphp --}}
+    @endforeach
 
     @section('posts')
         @parent

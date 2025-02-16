@@ -1,8 +1,21 @@
 @section('posts')
 
-    <h2 class="posts-erea-title">
+    <h2 class="posts-erea-title" id='posts-erea'>
         投稿エリア
     </h2>
+
+    {{-- バリデーションでエラーがあった場合は、エラーを表示してここへジャンプしてくる --}}
+    @if ($errors->any())
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                    <li>
+                        {{ $error }}
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
 
     <div class="posts-erea-wrapper">
         <form action="{{ route('top.posts') }}" method="post" class="post-form">
