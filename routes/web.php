@@ -24,7 +24,11 @@ Route::get('/top', [BbsController::class, 'top'])->name('top');
 Route::post('/top', [BbsController::class, 'posts'])->name('top.posts');
 
 // 各投稿から編集ボタン、削除ボタンを押したときのルーティング
-Route::get('/{post_id}/eest', [BbsController::class, 'editEdit'])->name('edit.edit');
+// Route::get('/{post_id}/edit2', function() {
+//     dd(session());
+//     return;
+// });
+Route::get('/{post_id}/edit2', [BbsController::class, 'editEdit'])->name('edit.edit');
 Route::get('/{post_id}/edit', [BbsController::class, 'DeleteModal'])->name('edit.delete');
 Route::get('/{post_id}/destroy', [BbsController::class, 'doDestroy']);
 Route::delete('/{post_id}/destroy', [BbsController::class, 'doDestroy'])->name('confirm-destroy');
@@ -32,9 +36,10 @@ Route::delete('/{post_id}/destroy', [BbsController::class, 'doDestroy'])->name('
 
 
 // testpage
-Route::get('/test', function () {
-    return view('/bbs.test');
-})->name('test');
+// Route::get('/test', function () {
+//     return view('/bbs.test');
+// })->name('test');
+Route::get('/test', [BbsController::class, 'testCon'])->name('test');
 
 Route::get('/test2', function () {
     return redirect()->route('test3');

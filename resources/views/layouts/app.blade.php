@@ -15,7 +15,13 @@
 
     @yield('content')
 
-    @include('bbs.posts-erea')
+    {{--  --}}
+    @if (Session::has('post_edit'))
+
+        @include('bbs.post-edit')
+    @else
+        @include('bbs.posts-erea')
+    @endif
 
     @if ( Session::has('post_destroy') )
         @php Session::forget('post_destroy'); @endphp
@@ -23,9 +29,6 @@
         @include('bbs.post-destroy')
     @endif
 
-    @if (false)
-        @include('bbs.post-edit')
-    @endif
 
 
 
