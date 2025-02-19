@@ -134,9 +134,6 @@ class BbsController extends Controller
         return redirect('/test')->with('message', 'モーダルのコントローラーと負ったよ');
     }
 
-    public function testCon() {
-        dd($editPost);
-    }
 
 
 }
